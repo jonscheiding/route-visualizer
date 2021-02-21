@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Route Visualizer",
+  "name": "For drawing driving routes from a set of waypoints.",
   "icons": [
     {
       "src": "favicon.ico",

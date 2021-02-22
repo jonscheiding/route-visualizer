@@ -1,30 +1,30 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import axios from 'axios';
 
 import './Map.css';
 
-const points = [
-  [49.932707, 11.588051],
-  [50.3404, 11.64705],
-  [50.1405, 11.5777]
-];
-
-function Map() {
+function Map({points}) {
   const [paths, setPaths] = useState([]);
 
-  async function loadPaths() {
-    const pointsQ = points.map(p => `point=${p}`).join('&'); 
-    const response = await axios.get(`https://graphhopper.com/api/1/route?${pointsQ}&vehicle=car&debug=true&key=${process.env.REACT_APP_GRAPHHOPPER_KEY}&type=json&points_encoded=false`);
-    setPaths(response.data.paths.map(p => p.points));
-  }
-
   useEffect(() => {
+    async function loadPaths() {
+      const pointsQ = points.map(p => `point=${p.lat},${p.lon}`).join('&'); 
+      const response = await axios.get(`https://graphhopper.com/api/1/route?${pointsQ}&vehicle=car&debug=true&key=${process.env.REACT_APP_GRAPHHOPPER_KEY}&type=json&points_encoded=false`);
+      setPaths(response.data.paths.map(p => p.points));
+    }
+
+    setPaths([]);
+  
     loadPaths();
-  }, []);
+  }, [points]);
 
   const position = points[0];
   console.log(paths);
+
+  if(paths.length === 0) {
+    return <div />;
+  }
 
   return (
     <MapContainer center={position} zoom={11} scrollWheelZoom={false}>

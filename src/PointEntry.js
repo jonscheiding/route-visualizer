@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { TextField, Button } from '@material-ui/core';
 import csv from 'csvtojson';
 
 export default function PointEntry({onPointsAdded}) {
@@ -16,8 +17,18 @@ export default function PointEntry({onPointsAdded}) {
     setText('lat,lon\n');
   }
 
-  return <>
-    <textarea value={text} onChange={e => setText(e.target.value)} />
-    <button onClick={applyText}>Add</button>
-  </>;
+  return (<>
+    <div>
+      <TextField
+        id="standard-multiline-flexible"
+        label="Add Points"
+        multiline
+        rowsMax={4}
+        value={text}
+        onChange={e => setText(e.target.value)}
+        fullWidth
+      />
+    </div>
+    <Button onClick={applyText} color="primary">Add</Button>
+  </>);
 }

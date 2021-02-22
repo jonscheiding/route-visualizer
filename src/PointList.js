@@ -1,24 +1,31 @@
+import { Table, TableBody, TableCell, TableHead, TableRow, IconButton } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+
 export default function PointList({points, onPointRemoved}) {
   return (
-    <table>
-      <thead>
-        <tr>
-          <td>Latitude</td>
-          <td>Longitude</td>
-          <td>&nbsp;</td>
-        </tr>
-      </thead>
-      <tbody>
+    <Table size="small">
+      <TableHead>
+        <TableRow>
+          <TableCell>Latitude</TableCell>
+          <TableCell>Longitude</TableCell>
+          <TableCell>&nbsp;</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
       {
         points.map((p, i) => (
-          <tr key={i}>
-            <td>{p.lat}</td>
-            <td>{p.lon}</td>
-            <td><button onClick={() => onPointRemoved(i)}>X</button></td>
-          </tr>
+          <TableRow key={i}>
+            <TableCell>{p.lat}</TableCell>
+            <TableCell>{p.lon}</TableCell>
+            <TableCell>
+              <IconButton onClick={() => onPointRemoved(i)} size="small">
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </TableCell>
+          </TableRow>
         ))
       }
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 };

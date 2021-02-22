@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { CircularProgress, Grid } from '@material-ui/core';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import axios from 'axios';
 
@@ -23,7 +24,13 @@ function Map({points}) {
   console.log(paths);
 
   if(paths.length === 0) {
-    return <div />;
+    return (
+      <Grid container alignItems="center" style={{height: '100vh'}}>
+        <Grid item xs={12} style={{textAlign: 'center'}}>
+          <CircularProgress />
+        </Grid>
+      </Grid>
+    );
   }
 
   return (

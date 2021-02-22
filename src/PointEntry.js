@@ -14,7 +14,7 @@ export default function PointEntry({onPointsAdded}) {
 
   function applyText() {
     loadCsvToPoints(text);
-    setText('lat,lon\n');
+    setText(text.match(/[^\n]*\n/));
   }
 
   return (<>
@@ -23,7 +23,7 @@ export default function PointEntry({onPointsAdded}) {
         id="standard-multiline-flexible"
         label="Add Points"
         multiline
-        rowsMax={4}
+        rowsMax={20}
         value={text}
         onChange={e => setText(e.target.value)}
         fullWidth

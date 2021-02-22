@@ -25,8 +25,8 @@ function App() {
     setPoints([...points, ...consolidatePoints(newPoints, 0.25)]);
   }
 
-  function onPointRemoved(i) {
-    points.splice(i, 1);
+  function onPointsRemoved(i, length = 1) {
+    points.splice(i, length);
     setPoints([...points]);
   }
 
@@ -37,7 +37,7 @@ function App() {
       </Grid>
       <Grid item xs={12} md={4} className={classes.pointEntry}>
         <PointEntry onPointsAdded={onPointsAdded} />
-        <PointList points={points} onPointRemoved={onPointRemoved} />
+        <PointList points={points} onPointsRemoved={onPointsRemoved} />
       </Grid>
     </Grid>
   );

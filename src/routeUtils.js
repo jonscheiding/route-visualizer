@@ -81,8 +81,22 @@ export async function computeRoutes(points) {
     console.log('Computing route for points', pointsBatch);
 
     const pointsQ = pointsBatch.map(p => `point=${p.lat},${p.lon}`).join('&'); 
-    const response = await axios.get(`https://graphhopper.com/api/1/route?${pointsQ}&vehicle=car&debug=true&key=${process.env.REACT_APP_GRAPHHOPPER_KEY}&type=json&points_encoded=false`);
-    paths.push(...response.data.paths.map(p => p.points));
+    try {
+      const response = await axios.get(
+        `https://graphhopper.com/api/1/route?${pointsQ}`,
+        {
+          params: {
+            vehicle: 'car',
+            key: process.env.REACT_APP_GRAPHHOPPER_KEY,
+            type: 'json',
+            points_encoded: false
+          }
+        });
+      paths.push(...response.data.paths.map(p => p.points));
+    } catch(e) {
+      if(!e.isAxiosError || !e.response) throw e;
+      throw new Error(e.response.data.message);
+    }
   }
 
   console.log(`Computed ${paths.length} routes.`, paths);

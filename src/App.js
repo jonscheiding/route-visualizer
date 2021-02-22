@@ -19,11 +19,7 @@ const useStyles = makeStyles({
 function App() {
   const classes = useStyles();
 
-  const [points, setPoints] = useState([
-    {lat: 49.932707, lon: 11.588051},
-    {lat: 50.3404, lon: 11.64705},
-    {lat: 50.1405, lon: 11.5777}
-  ]);
+  const [points, setPoints] = useState([]);
 
   function onPointsAdded(newPoints) {
     setPoints([...points, ...consolidatePoints(newPoints, 0.25)]);

@@ -36,8 +36,6 @@ function Map({points}) {
 
   const position = points[0];
 
-  if(message )
-
   if(paths.length === 0 || message != null) {
     return (
       <Grid container alignItems="center" justify="center" style={{height: '100vh'}}>

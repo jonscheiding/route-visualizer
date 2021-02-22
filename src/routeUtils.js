@@ -1,4 +1,5 @@
 import axios from 'axios';
+import csv from 'csvtojson';
 
 /**
  * @typedef {Object} Point
@@ -102,4 +103,32 @@ export async function computeRoutes(points) {
   console.log(`Computed ${paths.length} routes.`, paths);
 
   return paths;
+}
+
+export async function loadPointsFromCsv(csvString) {
+  const warnings = [];
+
+  function parseNumeric(s) {
+    if(!s) return null;
+    const result = parseFloat(s);
+    if(isNaN(result)) {
+      warnings.push(`Invalid numeric lat/long: '${s}'`);
+    }
+    return result;
+  }
+
+  return new Promise((resolve, reject) => {
+    csv({colParser: {lat: parseNumeric, lon: parseNumeric}})
+      .fromString(csvString)
+      .then(
+        json => {
+          if(warnings.length > 0) {
+            reject(new Error(`Failed to parse CSV.\n${warnings.join('\n')}`));
+          } else {
+            resolve(json.filter(f => f.lat && f.lon))
+          }
+        },
+        reject
+      );
+  });
 }

@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { CircularProgress, Grid } from '@material-ui/core';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
-import axios from 'axios';
 
 import './Map.css';
+import { computeRoutes } from './routeUtils';
 
 function Map({points}) {
   const [paths, setPaths] = useState([]);
 
   useEffect(() => {
     async function loadPaths() {
-      const pointsQ = points.map(p => `point=${p.lat},${p.lon}`).join('&'); 
-      const response = await axios.get(`https://graphhopper.com/api/1/route?${pointsQ}&vehicle=car&debug=true&key=${process.env.REACT_APP_GRAPHHOPPER_KEY}&type=json&points_encoded=false`);
-      setPaths(response.data.paths.map(p => p.points));
+      setPaths(await computeRoutes(points));
     }
 
     setPaths([]);
@@ -21,7 +19,6 @@ function Map({points}) {
   }, [points]);
 
   const position = points[0];
-  console.log(paths);
 
   if(paths.length === 0) {
     return (

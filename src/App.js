@@ -34,7 +34,6 @@ function App() {
     setPoints([...points]);
   }
 
-  console.log(points);
   return (
     <Grid container>
       <Grid item xs={12} md={8}>

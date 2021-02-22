@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 /**
  * @typedef {Object} Point
  * @property {Number} lat
@@ -59,4 +61,31 @@ export function calculateDistance(pointA, pointB) {
     dist = dist * 60 * 1.1515;
     return dist;
   }
+}
+
+/** 
+ * Generates the routes with GraphHopper,
+ * using batching to avoid overly long URLs.
+ * @param {Point[]} points
+ */
+export async function computeRoutes(points) {
+  const batchSize = 25;
+
+  const paths = [];
+  let index = 0;
+
+  while(index < points.length) {
+    const pointsBatch = points.slice(index, index + batchSize);
+    index += pointsBatch.length;
+
+    console.log('Computing route for points', pointsBatch);
+
+    const pointsQ = pointsBatch.map(p => `point=${p.lat},${p.lon}`).join('&'); 
+    const response = await axios.get(`https://graphhopper.com/api/1/route?${pointsQ}&vehicle=car&debug=true&key=${process.env.REACT_APP_GRAPHHOPPER_KEY}&type=json&points_encoded=false`);
+    paths.push(...response.data.paths.map(p => p.points));
+  }
+
+  console.log(`Computed ${paths.length} routes.`, paths);
+
+  return paths;
 }

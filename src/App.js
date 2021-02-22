@@ -2,6 +2,9 @@ import { useState } from 'react';
 
 import Map from './Map';
 import PointList from './PointList'
+import PointEntry from './PointEntry';
+
+import { consolidatePoints } from './routeUtils';
 
 function App() {
   const [points, setPoints] = useState([
@@ -9,6 +12,10 @@ function App() {
     {lat: 50.3404, lon: 11.64705},
     {lat: 50.1405, lon: 11.5777}
   ]);
+
+  function onPointsAdded(newPoints) {
+    setPoints([...points, ...consolidatePoints(newPoints, 0.25)]);
+  }
 
   function onPointRemoved(i) {
     points.splice(i, 1);
@@ -18,8 +25,9 @@ function App() {
   console.log(points);
   return (
     <div>
-      <PointList points={points} onPointRemoved={onPointRemoved} />
       <Map points={points} />
+      <PointEntry onPointsAdded={onPointsAdded} />
+      <PointList points={points} onPointRemoved={onPointRemoved} />
     </div>
   );
 }

@@ -76,6 +76,8 @@ export async function computeRoutes(points) {
   let index = 0;
 
   while(index < points.length) {
+    if(index + batchSize === points.length - 1) index++;
+
     const pointsBatch = points.slice(index, index + batchSize);
     index += pointsBatch.length;
 
@@ -87,7 +89,7 @@ export async function computeRoutes(points) {
         `https://graphhopper.com/api/1/route?${pointsQ}`,
         {
           params: {
-            vehicle: 'car',
+            vehicle: 'foot',
             key: process.env.REACT_APP_GRAPHHOPPER_KEY,
             type: 'json',
             points_encoded: false
